@@ -1,0 +1,221 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model SiteSettings {
+  id              String   @id @default(uuid()) @db.Uuid
+  siteName        String   @map("site_name") @db.VarChar(100)
+  tagline         String?  @db.VarChar(255)
+  logoUrl         String?  @map("logo_url")
+  faviconUrl      String?  @map("favicon_url")
+  tabTitle        String   @map("tab_title") @db.VarChar(100)
+  metaDescription String?  @map("meta_description")
+  ogImageUrl      String?  @map("og_image_url")
+  primaryColor    String   @default("#0ea5e9") @map("primary_color") @db.VarChar(20)
+  contactEmail    String?  @map("contact_email") @db.VarChar(100)
+  contactPhone    String?  @map("contact_phone") @db.VarChar(50)
+  contactAddress  String?  @map("contact_address")
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("site_settings")
+}
+
+model SeoMetadata {
+  id              String   @id @default(uuid()) @db.Uuid
+  pageSlug        String   @unique @map("page_slug") @db.VarChar(100)
+  metaTitle       String   @map("meta_title") @db.VarChar(160)
+  metaDescription String   @map("meta_description") @db.VarChar(320)
+  ogTitle         String?  @map("og_title") @db.VarChar(160)
+  ogDescription   String?  @map("og_description") @db.VarChar(320)
+  ogImageUrl      String?  @map("og_image_url")
+  canonicalUrl    String?  @map("canonical_url")
+  indexPage       Boolean  @default(true) @map("index_page")
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("seo_metadata")
+}
+
+model HeroSection {
+  id               String   @id @default(uuid()) @db.Uuid
+  headline         String   @db.VarChar(200)
+  subheadline      String?
+  imageUrl         String?  @map("image_url")
+  ctaPrimaryText   String?  @map("cta_primary_text") @db.VarChar(80)
+  ctaPrimaryUrl    String?  @map("cta_primary_url")
+  ctaSecondaryText String?  @map("cta_secondary_text") @db.VarChar(80)
+  ctaSecondaryUrl  String?  @map("cta_secondary_url")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  animatedTexts    String[] @default([]) @map("animated_texts")
+
+  @@map("hero_section")
+}
+
+model Biography {
+  id                String   @id @default(uuid()) @db.Uuid
+  sectionTitle      String   @map("section_title") @db.VarChar(100)
+  contentHtml       String   @map("content_html")
+  profileImageUrl   String?  @map("profile_image_url")
+  yearsExperience   String?  @map("years_experience") @db.VarChar(20)
+  projectsCompleted String?  @map("projects_completed") @db.VarChar(20)
+  clientsServed     String?  @map("clients_served") @db.VarChar(20)
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("biography")
+}
+
+model Service {
+  id              String           @id @default(uuid()) @db.Uuid
+  title           String           @db.VarChar(100)
+  description     String
+  thumbnailUrl    String?          @map("thumbnail_url")
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  serviceFeatures ServiceFeature[]
+
+  @@map("services")
+}
+
+model ServiceFeature {
+  id          String  @id @default(uuid()) @db.Uuid
+  serviceId   String  @map("service_id") @db.Uuid
+  featureText String  @map("feature_text") @db.VarChar(200)
+  sortOrder   Int     @default(0) @map("sort_order")
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@map("service_features")
+}
+
+model PackagePlan {
+  id              String               @id @default(uuid()) @db.Uuid
+  slug            String               @unique @db.VarChar(80)
+  name            String               @db.VarChar(100)
+  summary         String
+  priceLabel      String               @map("price_label") @db.VarChar(50)
+  priceAmount     Int                  @map("price_amount")
+  renewalLabel    String?              @map("renewal_label") @db.VarChar(120)
+  ctaLabel        String               @default("Book Now") @map("cta_label") @db.VarChar(50)
+  ctaUrl          String?              @map("cta_url")
+  isFeatured      Boolean              @default(false) @map("is_featured")
+  sortOrder       Int                  @default(0) @map("sort_order")
+  createdAt       DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  packageFeatures PackagePlanFeature[]
+
+  @@map("package_plans")
+}
+
+model PackagePlanFeature {
+  id            String      @id @default(uuid()) @db.Uuid
+  packagePlanId String      @map("package_plan_id") @db.Uuid
+  featureText   String      @map("feature_text") @db.VarChar(200)
+  sortOrder     Int         @default(0) @map("sort_order")
+  packagePlan   PackagePlan @relation(fields: [packagePlanId], references: [id], onDelete: Cascade)
+
+  @@map("package_plan_features")
+}
+
+model ProjectCategory {
+  id         String      @id @default(uuid()) @db.Uuid
+  name       String      @db.VarChar(100)
+  portfolios Portfolio[]
+
+  @@map("project_categories")
+}
+
+model Portfolio {
+  id                String           @id @default(uuid()) @db.Uuid
+  slug              String           @unique @db.VarChar(120)
+  title             String           @db.VarChar(160)
+  summary           String           @db.VarChar(255)
+  thumbnailUrl      String?          @map("thumbnail_url")
+  projectUrl        String?          @map("project_url")
+  clientName        String?          @map("client_name") @db.VarChar(100)
+  projectCategoryId String?          @map("project_category") @db.Uuid
+  projectCategory   ProjectCategory? @relation(fields: [projectCategoryId], references: [id], onDelete: SetNull)
+  sortOrder         Int              @default(0) @map("sort_order")
+  isFeatured        Boolean          @default(false) @map("is_featured")
+  publishedAt       DateTime?        @map("published_at") @db.Timestamptz(6)
+  createdAt         DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  contentHtml       String?          @map("content_html")
+
+  @@index([projectCategoryId], map: "portfolio_project_category_idx")
+
+  @@map("portfolio")
+}
+
+model SocialProof {
+  id              String   @id @default(uuid()) @db.Uuid
+  clientName      String   @map("client_name") @db.VarChar(100)
+  clientTitle     String?  @map("client_title") @db.VarChar(100)
+  clientCompany   String?  @map("client_company") @db.VarChar(100)
+  testimonialText String   @map("testimonial_text")
+  rating          Int      @default(5)
+  avatarUrl       String?  @map("avatar_url")
+  projectCategory String?  @map("project_category") @db.VarChar(100)
+  sortOrder       Int      @default(0) @map("sort_order")
+  isFeatured      Boolean  @default(false) @map("is_featured")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("social_proof")
+}
+
+model CtaSection {
+  id          String   @id @default(uuid()) @db.Uuid
+  headline    String   @db.VarChar(200)
+  subheadline String?
+  buttonText  String   @map("button_text") @db.VarChar(80)
+  buttonUrl   String   @map("button_url")
+  buttonStyle String   @default("primary") @map("button_style") @db.VarChar(20)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("cta_section")
+}
+
+model FooterColumn {
+  id          String       @id @default(uuid()) @db.Uuid
+  columnTitle String       @map("column_title") @db.VarChar(80)
+  sortOrder   Int          @default(0) @map("sort_order")
+  footerLinks FooterLink[]
+
+  @@map("footer_columns")
+}
+
+model FooterLink {
+  id         String       @id @default(uuid()) @db.Uuid
+  columnId   String       @map("column_id") @db.Uuid
+  label      String       @db.VarChar(80)
+  url        String
+  isExternal Boolean      @default(false) @map("is_external")
+  sortOrder  Int          @default(0) @map("sort_order")
+  column     FooterColumn @relation(fields: [columnId], references: [id], onDelete: Cascade)
+
+  @@map("footer_links")
+}
+
+model SocialLink {
+  id        String @id @default(uuid()) @db.Uuid
+  platform  String @db.VarChar(50)
+  url       String
+  iconName  String @map("icon_name") @db.VarChar(80)
+  sortOrder Int    @default(0) @map("sort_order")
+
+  @@map("social_links")
+}
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  username  String   @unique @db.VarChar(50)
+  email     String   @unique @db.VarChar(100)
+  password  String   @db.VarChar(255)
+  role      String   @default("admin") @db.VarChar(20)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("users")
+}
