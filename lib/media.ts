@@ -20,6 +20,7 @@ const mediaFolders = [
   "favicon",
   "hero",
   "logo",
+  "payment-partner",
   "og-image",
   "portfolio",
   "proof",

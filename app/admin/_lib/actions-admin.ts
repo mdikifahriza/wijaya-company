@@ -654,3 +654,84 @@ export async function deleteSocialProofAction(id: string, oldImageUrl?: string |
   revalidatePath("/admin/proof");
   revalidatePath("/");
 }
+
+export async function savePaymentPartnerAction(formData: FormData) {
+  await requireAdminSession();
+
+  const id = String(formData.get("id") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  const linkUrl = String(formData.get("linkUrl") ?? "").trim();
+  const sortOrder = Number(formData.get("sortOrder") ?? 0);
+  const isActive = formData.get("isActive") === "on";
+  const imageFile = formData.get("image") as File | null;
+  const oldImageUrl = normalizeStoredMediaValue(
+    String(formData.get("image_old") ?? ""),
+  );
+
+  if (!name) {
+    throw new Error("Nama payment partner wajib diisi.");
+  }
+
+  let logoUrl = oldImageUrl;
+
+  if (imageFile && imageFile.size > 0) {
+    const uploadResult = await uploadImageFileToR2(imageFile, "payment-partner");
+    logoUrl = uploadResult.url ?? oldImageUrl;
+
+    if (oldImageUrl && oldImageUrl !== logoUrl) {
+      await deleteImageFileFromR2(oldImageUrl);
+    }
+  }
+
+  if (!logoUrl) {
+    throw new Error("Logo payment partner wajib diisi.");
+  }
+
+  const data = {
+    name,
+    logoUrl,
+    linkUrl: linkUrl || null,
+    sortOrder: Number.isFinite(sortOrder) ? sortOrder : 0,
+    isActive,
+  };
+
+  if (id) {
+    await prisma.paymentPartner.update({
+      where: { id },
+      data,
+    });
+  } else {
+    await prisma.paymentPartner.create({
+      data,
+    });
+  }
+
+  revalidatePath("/admin/payment-partners");
+  revalidatePath("/admin");
+  revalidatePath("/");
+}
+
+export async function deletePaymentPartnerAction(
+  id: string,
+  oldLogoUrl?: string | null,
+) {
+  await requireAdminSession();
+
+  if (!id) {
+    throw new Error("ID required");
+  }
+
+  const normalizedOldLogoUrl = normalizeStoredMediaValue(oldLogoUrl);
+
+  if (normalizedOldLogoUrl) {
+    await deleteImageFileFromR2(normalizedOldLogoUrl);
+  }
+
+  await prisma.paymentPartner.delete({
+    where: { id },
+  });
+
+  revalidatePath("/admin/payment-partners");
+  revalidatePath("/admin");
+  revalidatePath("/");
+}

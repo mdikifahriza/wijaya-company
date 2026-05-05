@@ -144,7 +144,6 @@ model Portfolio {
   contentHtml       String?          @map("content_html")
 
   @@index([projectCategoryId], map: "portfolio_project_category_idx")
-
   @@map("portfolio")
 }
 
@@ -205,6 +204,19 @@ model SocialLink {
   sortOrder Int    @default(0) @map("sort_order")
 
   @@map("social_links")
+}
+
+model PaymentPartner {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(80)
+  logoUrl   String   @map("logo_url")
+  linkUrl   String?  @map("link_url")
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("payment_partners")
 }
 
 model User {

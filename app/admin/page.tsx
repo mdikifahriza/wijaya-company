@@ -14,6 +14,7 @@ export default async function AdminOverviewPage() {
     footerColumns,
     heroSections,
     packagePlans,
+    paymentPartners,
     portfolios,
     services,
     socialProof,
@@ -91,6 +92,22 @@ export default async function AdminOverviewPage() {
         <div className="card card-lg bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="card-body p-6 flex flex-col gap-6">
             <div className="d-flex align-items-center gap-3 flex">
+              <div className="icon-shape h-12 w-12 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center mr-3">
+                <i className="bi bi-credit-card text-xl"></i>
+              </div>
+              <div className="font-semibold text-gray-600">Payment Partner</div>
+            </div>
+            <div className="d-flex justify-content-between align-items-center lh-1 flex justify-between items-center mt-4">
+              <div className="fs-3 fw-bold text-3xl font-bold text-gray-800">
+                {paymentPartners.length}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card card-lg bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="card-body p-6 flex flex-col gap-6">
+            <div className="d-flex align-items-center gap-3 flex">
               <div className="icon-shape h-12 w-12 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mr-3">
                 <i className="bi bi-link-45deg text-xl"></i>
               </div>
@@ -130,6 +147,12 @@ export default async function AdminOverviewPage() {
                         className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-5 py-2.5 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
                      >
                         Kelola Referensi Web
+                     </Link>
+                     <Link
+                        href="/admin/payment-partners"
+                        className="inline-flex items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 px-5 py-2.5 text-sm font-medium text-teal-700 transition hover:bg-teal-100"
+                     >
+                        Kelola Payment Partner
                      </Link>
                      <Link
                         href="/"

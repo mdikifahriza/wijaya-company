@@ -14,6 +14,7 @@ if (!connectionString) {
 type PrismaWithDelegates = PrismaClient & {
   packagePlan: PrismaClient["packagePlan"];
   portfolio: PrismaClient["portfolio"];
+  paymentPartner: PrismaClient["paymentPartner"];
   siteSettings: PrismaClient["siteSettings"];
   service: PrismaClient["service"];
   user: PrismaClient["user"];
@@ -53,6 +54,7 @@ function hasExpectedDelegates(client: PrismaClient): client is PrismaWithDelegat
   return Boolean(
     candidate.packagePlan &&
       candidate.portfolio &&
+      candidate.paymentPartner &&
       candidate.siteSettings &&
       candidate.service &&
       candidate.user,
@@ -131,6 +133,27 @@ function isPortfolioModelInSync(client: PrismaClient) {
   );
 }
 
+function isPaymentPartnerModelInSync(client: PrismaClient) {
+  const runtimeDataModel = (client as PrismaClientWithRuntimeModel)._runtimeDataModel;
+  const paymentPartnerModel = runtimeDataModel?.models?.PaymentPartner;
+  const fieldNames = new Set(paymentPartnerModel?.fields?.map((field) => field.name) ?? []);
+
+  if (fieldNames.size === 0) {
+    return false;
+  }
+
+  return (
+    fieldNames.has("id") &&
+    fieldNames.has("name") &&
+    fieldNames.has("logoUrl") &&
+    fieldNames.has("linkUrl") &&
+    fieldNames.has("sortOrder") &&
+    fieldNames.has("isActive") &&
+    fieldNames.has("createdAt") &&
+    fieldNames.has("updatedAt")
+  );
+}
+
 function getPrismaClient() {
   const cachedPrisma = globalForPrisma.prisma;
 
@@ -139,7 +162,8 @@ function getPrismaClient() {
     hasExpectedDelegates(cachedPrisma) &&
     isServiceModelInSync(cachedPrisma) &&
     isPackagePlanModelInSync(cachedPrisma) &&
-    isPortfolioModelInSync(cachedPrisma)
+    isPortfolioModelInSync(cachedPrisma) &&
+    isPaymentPartnerModelInSync(cachedPrisma)
   ) {
     return cachedPrisma;
   }
@@ -155,7 +179,8 @@ function getPrismaClient() {
     !hasExpectedDelegates(prisma) ||
     !isServiceModelInSync(prisma) ||
     !isPackagePlanModelInSync(prisma) ||
-    !isPortfolioModelInSync(prisma)
+    !isPortfolioModelInSync(prisma) ||
+    !isPaymentPartnerModelInSync(prisma)
   ) {
     throw new Error(
       "Prisma client belum sinkron dengan database. Jalankan `npm run prisma:sync-db` lalu restart server dev.",

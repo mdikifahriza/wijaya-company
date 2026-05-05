@@ -1,9 +1,23 @@
 import type { Metadata } from "next";
+import { DM_Serif_Display, Inter } from "next/font/google";
 import { connection } from "next/server";
 import { resolveMediaUrl } from "@/lib/media-url";
 import { prisma } from "@/lib/prisma";
 import "./globals.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans-ui",
+  display: "swap",
+});
+
+const dmSerifDisplay = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-display-ui",
+  display: "swap",
+});
 
 const defaultSiteName = "Wijaya Company";
 const defaultDescription =
@@ -52,15 +66,15 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     alternates: homeSeo?.canonicalUrl
       ? {
-        canonical: homeSeo.canonicalUrl,
-      }
+          canonical: homeSeo.canonicalUrl,
+        }
       : undefined,
     icons: icon
       ? {
-        icon,
-        shortcut: icon,
-        apple: icon,
-      }
+          icon,
+          shortcut: icon,
+          apple: icon,
+        }
       : undefined,
     openGraph: {
       title: ogTitle,
@@ -76,8 +90,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="h-full antialiased" suppressHydrationWarning>
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>{children}</body>
+    <html
+      lang="id"
+      className={`${inter.variable} ${dmSerifDisplay.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

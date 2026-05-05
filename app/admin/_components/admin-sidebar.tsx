@@ -65,6 +65,7 @@ export function AdminSidebar({
                                       item.countLabel === 'pkg' ? 'boxes' :
                                       item.countLabel === 'port' ? 'images' :
                                       item.countLabel === 'proof' ? 'chat-square-quote' :
+                                      item.countLabel === 'pay' ? 'credit-card' :
                                       item.countLabel === 'cta' ? 'lightning' :
                                       item.countLabel === 'foot' ? 'layout-split' :
                                       item.countLabel === 'social' ? 'share' :

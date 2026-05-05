@@ -8,6 +8,7 @@ export const adminNavigation = [
   { href: "/admin/packages", label: "Paket", countLabel: "pkg" },
   { href: "/admin/portfolio", label: "Referensi Web", countLabel: "port" },
   { href: "/admin/proof", label: "Testimoni", countLabel: "proof" },
+  { href: "/admin/payment-partners", label: "Payment Partner", countLabel: "pay" },
   { href: "/admin/cta", label: "Call to Action", countLabel: "cta" },
   { href: "/admin/footer", label: "Footer", countLabel: "foot" },
   { href: "/admin/social-links", label: "Tautan Sosial", countLabel: "social" },

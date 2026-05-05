@@ -37,9 +37,10 @@ export function PortfolioImageLightbox({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="group relative block aspect-[4/3] w-full overflow-hidden rounded-[1.6rem] bg-[#dfe5d4] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#69734f] focus-visible:ring-offset-2 focus-visible:ring-offset-[#e5e9dc] xl:h-full xl:aspect-auto"
+        className="group relative block aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-md)] bg-[#dfe5d4] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface xl:h-full xl:aspect-auto"
       >
         <div className="relative h-full w-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt={alt}
@@ -68,10 +69,11 @@ export function PortfolioImageLightbox({
             <i className="bi bi-x-lg"></i>
           </button>
 
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt={alt}
-            className="max-h-[88vh] max-w-[95vw] rounded-xl object-contain shadow-[0_28px_80px_rgba(0,0,0,0.45)]"
+            className="max-h-[88vh] max-w-[95vw] rounded-[var(--radius-md)] object-contain shadow-[0_28px_80px_rgba(0,0,0,0.45)]"
             onClick={(event) => event.stopPropagation()}
           />
         </div>

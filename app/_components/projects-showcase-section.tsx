@@ -66,23 +66,28 @@ export function ProjectsShowcaseSection({
     ? portfolios.filter((item) => item.isFeatured)
     : portfolios;
 
-  const groups = filteredProjects.reduce<Map<string, ProjectItem[]>>((accumulator, item) => {
-    const category = getCategoryName(item);
-    const bucket = accumulator.get(category);
+  const groups = filteredProjects.reduce<Map<string, ProjectItem[]>>(
+    (accumulator, item) => {
+      const category = getCategoryName(item);
+      const bucket = accumulator.get(category);
 
-    if (bucket) {
-      bucket.push(item);
+      if (bucket) {
+        bucket.push(item);
+        return accumulator;
+      }
+
+      accumulator.set(category, [item]);
       return accumulator;
-    }
+    },
+    new Map(),
+  );
 
-    accumulator.set(category, [item]);
-    return accumulator;
-  }, new Map());
-
-  const groupedProjects = Array.from(groups.entries()).map(([category, items]) => ({
-    category,
-    items,
-  }));
+  const groupedProjects = Array.from(groups.entries()).map(
+    ([category, items]) => ({
+      category,
+      items,
+    }),
+  );
 
   if (groupedProjects.length === 0) {
     return null;
@@ -91,11 +96,14 @@ export function ProjectsShowcaseSection({
   return (
     <section
       id={sectionId}
-      className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-10 lg:py-24"
+      className="mx-auto w-full max-w-7xl px-4 py-[var(--section-py)] sm:px-6 lg:px-10"
     >
       {showHeading ? (
         <div className="mb-12 text-center">
-          <h2 className="font-display text-4xl font-bold text-[#69734f] sm:text-5xl">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-muted">
+            Portfolio
+          </p>
+          <h2 className="mt-3 font-display text-4xl font-bold text-ink sm:text-5xl">
             Proyek Kami
           </h2>
         </div>
@@ -104,9 +112,12 @@ export function ProjectsShowcaseSection({
       <div className="space-y-14">
         {groupedProjects.map((group) => (
           <section key={group.category} className="space-y-5">
-            <h3 className="text-lg font-semibold uppercase tracking-[0.14em] text-[#69734f]">
-              {group.category}
-            </h3>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-10 bg-border" />
+              <h3 className="text-lg font-semibold uppercase tracking-[0.14em] text-ink">
+                {group.category}
+              </h3>
+            </div>
 
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {group.items.map((project) => {
@@ -116,17 +127,18 @@ export function ProjectsShowcaseSection({
                   <Link
                     key={project.id}
                     href={`/portfolio/${project.slug}`}
-                    className="group relative block overflow-hidden rounded-lg border border-[#d8ddcf] bg-[#eceee8] transition-all duration-300 hover:-translate-y-1 hover:border-[#c4ccb2] hover:shadow-[0_18px_40px_rgba(23,52,40,0.08)]"
+                    className="group relative block overflow-hidden rounded-[var(--radius-md)] border border-border bg-white transition-all duration-300 hover:scale-[1.02] hover:border-accent/35 hover:shadow-[0_16px_36px_rgba(45,51,25,0.09)]"
                   >
-                    <div className="relative flex aspect-[4/3] items-center justify-center bg-[#dde2d4]">
+                    <div className="relative flex aspect-[4/3] items-center justify-center bg-[#e4e9db]">
                       {imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={imageUrl}
                           alt={project.title}
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
-                        <span className="text-base font-semibold uppercase tracking-[0.14em] text-[#69734f]">
+                        <span className="text-base font-semibold uppercase tracking-[0.14em] text-ink">
                           {getInitials(project.title)}
                         </span>
                       )}
@@ -147,7 +159,7 @@ export function ProjectsShowcaseSection({
         <div className="mt-12 text-center">
           <Link
             href="/portfolio"
-            className="inline-flex items-center gap-2 rounded-full border border-[#69734f] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#69734f] transition-transform hover:-translate-y-1 hover:bg-[#69734f] hover:text-white"
+            className="inline-flex items-center gap-2 rounded-full border border-accent px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-accent transition-transform hover:-translate-y-0.5 hover:bg-accent hover:text-white"
           >
             Lihat proyek lainnya
             <i className="bi bi-arrow-right"></i>

@@ -1,24 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f6ef;
-  --foreground: #69734f;
-  --muted: #7a8460;
-  --forest-950: #50593b;
-  --forest-900: #69734f;
-  --forest-700: #87926d;
-  --forest-500: #a9b38d;
-  --forest-200: #e5e9dc;
-  --forest-100: #f1f4eb;
-  --font-sans-ui: "Montserrat", "Avenir Next", "Segoe UI", sans-serif;
-  --font-display-ui: "Iowan Old Style", "Palatino Linotype", "Book Antiqua",
-    Georgia, serif;
+  --ink: #2d3319;
+  --ink-muted: #5c6645;
+  --accent: #4a6741;
+  --surface: #f2f8f1;
+  --border: #e2e5da;
+  --white: #ffffff;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --section-py: clamp(4rem, 8vw, 7rem);
+  --font-sans-ui: "Inter", system-ui, sans-serif;
+  --font-display-ui: "DM Serif Display", Georgia, serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--surface);
+  --color-foreground: var(--ink);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-white: var(--white);
   --font-sans: var(--font-sans-ui);
+  --font-display: var(--font-display-ui);
   --font-mono: "IBM Plex Mono", "Fira Code", monospace;
 }
 
@@ -41,12 +48,9 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--surface);
+  color: var(--ink);
   font-family: var(--font-sans-ui);
-  background-image:
-    radial-gradient(circle at top left, rgba(105, 115, 79, 0.26), transparent 35%),
-    linear-gradient(180deg, #dde3d3 0%, #eef1e7 32%, #f5f6ef 100%);
 }
 
 a,
@@ -61,42 +65,9 @@ button {
 }
 
 ::selection {
-  background: rgba(105, 115, 79, 0.18);
+  background: color-mix(in oklab, var(--accent) 24%, transparent);
 }
 
 .font-display {
   font-family: var(--font-display-ui);
-}
-
-@keyframes about-stat-float {
-
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  50% {
-    transform: translate3d(0, -12px, 0);
-  }
-}
-
-.about-stat-card {
-  animation: about-stat-float 6.8s ease-in-out infinite;
-  will-change: transform;
-}
-
-.about-stat-card:hover {
-  animation-play-state: paused;
-}
-
-.about-stat-card--1 {
-  animation-delay: 0s;
-}
-
-.about-stat-card--2 {
-  animation-delay: 0.8s;
-}
-
-.about-stat-card--3 {
-  animation-delay: 1.6s;
 }

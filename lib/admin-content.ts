@@ -14,6 +14,7 @@ export const getAdminPageData = cache(async () => {
       packagePlans,
       portfolios,
       socialProof,
+      paymentPartners,
       ctaSections,
       footerColumns,
       socialLinks,
@@ -82,6 +83,9 @@ export const getAdminPageData = cache(async () => {
       prisma.socialProof.findMany({
         orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
       }),
+      prisma.paymentPartner.findMany({
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+      }),
       prisma.ctaSection.findMany({
         orderBy: {
           updatedAt: "desc",
@@ -116,6 +120,7 @@ export const getAdminPageData = cache(async () => {
       packagePlans,
       portfolios,
       socialProof,
+      paymentPartners,
       ctaSections,
       footerColumns,
       socialLinks,
@@ -133,6 +138,7 @@ export const getAdminPageData = cache(async () => {
       packagePlans: [],
       portfolios: [],
       socialProof: [],
+      paymentPartners: [],
       ctaSections: [],
       footerColumns: [],
       socialLinks: [],

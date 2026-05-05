@@ -512,6 +512,89 @@ const fallbackProofs = [
   },
 ];
 
+const fallbackPaymentPartners = [
+  {
+    id: "fallback-payment-partner-1",
+    name: "QRIS",
+    logoUrl: null,
+    linkUrl: null,
+    sortOrder: 0,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "fallback-payment-partner-2",
+    name: "BCA",
+    logoUrl: null,
+    linkUrl: null,
+    sortOrder: 1,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "fallback-payment-partner-3",
+    name: "BRI",
+    logoUrl: null,
+    linkUrl: null,
+    sortOrder: 2,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "fallback-payment-partner-4",
+    name: "Indodana",
+    logoUrl: null,
+    linkUrl: null,
+    sortOrder: 3,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "fallback-payment-partner-5",
+    name: "Kredivo",
+    logoUrl: null,
+    linkUrl: null,
+    sortOrder: 4,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "fallback-payment-partner-6",
+    name: "Blibli",
+    logoUrl: null,
+    linkUrl: null,
+    sortOrder: 5,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "fallback-payment-partner-7",
+    name: "Visa",
+    logoUrl: null,
+    linkUrl: null,
+    sortOrder: 6,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "fallback-payment-partner-8",
+    name: "Mastercard",
+    logoUrl: null,
+    linkUrl: null,
+    sortOrder: 7,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+
 const fallbackFooterColumns = [
   {
     id: "fallback-footer-1",
@@ -571,6 +654,7 @@ export const getLandingPageData = cache(async () => {
       packagePlans,
       portfolios,
       socialProof,
+      paymentPartners,
       cta,
       footerColumns,
       socialLinks,
@@ -640,6 +724,10 @@ export const getLandingPageData = cache(async () => {
           },
         ],
       }),
+      prisma.paymentPartner.findMany({
+        where: { isActive: true },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+      }),
       prisma.ctaSection.findFirst({
         orderBy: {
           updatedAt: "desc",
@@ -678,6 +766,8 @@ export const getLandingPageData = cache(async () => {
         packagePlans.length > 0 ? packagePlans : fallbackPackagePlans,
       portfolios: portfolios.length > 0 ? portfolios : fallbackPortfolios,
       socialProof: socialProof.length > 0 ? socialProof : fallbackProofs,
+      paymentPartners:
+        paymentPartners.length > 0 ? paymentPartners : fallbackPaymentPartners,
       cta,
       footerColumns:
         footerColumns.length > 0 ? footerColumns : fallbackFooterColumns,
@@ -695,6 +785,7 @@ export const getLandingPageData = cache(async () => {
       packagePlans: fallbackPackagePlans,
       portfolios: fallbackPortfolios,
       socialProof: fallbackProofs,
+      paymentPartners: fallbackPaymentPartners,
       cta: null,
       footerColumns: fallbackFooterColumns,
       socialLinks: [],

@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
-    "prisma:sync-db": "prisma db pull && prisma generate",
+    "prisma:sync-db": "prisma db push && prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:seed-packages": "node prisma/seed-package-plans.mjs",
     "prisma:seed-portfolio": "node prisma/seed-portfolio.mjs",

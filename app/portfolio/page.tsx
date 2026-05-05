@@ -7,7 +7,8 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata = {
   title: "Proyek Kami",
-  description: "Kumpulan proyek pilihan untuk melihat kualitas presentasi, struktur, dan arah visual project.",
+  description:
+    "Kumpulan proyek pilihan untuk melihat kualitas presentasi, struktur, dan arah visual project.",
 };
 
 export default async function PortfolioListPage() {
@@ -48,33 +49,41 @@ export default async function PortfolioListPage() {
     `.catch(() => []),
   ]);
 
-  const portfolios = portfoliosFromSql.length > 0
-    ? portfoliosFromSql
-    : (await prisma.portfolio.findMany({
-        orderBy: [
-          { isFeatured: "desc" },
-          { sortOrder: "asc" },
-          { publishedAt: "desc" },
-          { createdAt: "desc" },
-        ],
-      })).map((portfolio) => ({
-        id: portfolio.id,
-        slug: portfolio.slug,
-        title: portfolio.title,
-        thumbnailUrl: portfolio.thumbnailUrl,
-        isFeatured: Boolean((portfolio as { isFeatured?: unknown }).isFeatured),
-        projectCategoryName: null,
-        projectCategory:
-          typeof (portfolio as { projectCategory?: unknown }).projectCategory === "string"
-            ? (portfolio as unknown as { projectCategory: string }).projectCategory
-            : null,
-      }));
+  const portfolios =
+    portfoliosFromSql.length > 0
+      ? portfoliosFromSql
+      : (
+          await prisma.portfolio.findMany({
+            orderBy: [
+              { isFeatured: "desc" },
+              { sortOrder: "asc" },
+              { publishedAt: "desc" },
+              { createdAt: "desc" },
+            ],
+          })
+        ).map((portfolio) => ({
+          id: portfolio.id,
+          slug: portfolio.slug,
+          title: portfolio.title,
+          thumbnailUrl: portfolio.thumbnailUrl,
+          isFeatured: Boolean(
+            (portfolio as { isFeatured?: unknown }).isFeatured,
+          ),
+          projectCategoryName: null,
+          projectCategory:
+            typeof (portfolio as { projectCategory?: unknown })
+              .projectCategory === "string"
+              ? (portfolio as unknown as { projectCategory: string })
+                  .projectCategory
+              : null,
+        }));
 
   const siteName = siteSettings?.siteName ?? "Wijaya Company";
   const logoUrl = resolveMediaUrl(siteSettings?.logoUrl);
 
   return (
-    <main className="relative min-h-screen bg-[#e5e9dc] text-[#69734f]">
+    <main className="relative min-h-screen bg-surface text-ink">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(74,103,65,0.12),transparent_72%)]" />
       <FolioHeader
         siteName={siteName}
         logoUrl={logoUrl}
@@ -85,10 +94,24 @@ export default async function PortfolioListPage() {
         ]}
       />
 
-      <div className="pt-16">
+      <section className="mx-auto w-full max-w-7xl px-4 pb-2 pt-28 sm:px-6 lg:px-10 lg:pt-32">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-muted">
+          Portfolio
+        </p>
+        <h1 className="mt-3 max-w-3xl font-display text-4xl font-bold text-ink sm:text-5xl">
+          Semua proyek dalam satu tempat
+        </h1>
+        <p className="mt-4 max-w-2xl text-base leading-8 text-ink-muted sm:text-lg">
+          Koleksi kerja terbaru kami, dari proyek unggulan sampai arsip lengkap
+          yang menunjukkan arah visual dan kualitas presentasi.
+        </p>
+      </section>
+
+      <div>
         <ProjectsShowcaseSection
           portfolios={portfolios}
           featuredOnly={false}
+          showHeading={false}
           showMoreButton={false}
         />
       </div>
